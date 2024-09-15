@@ -1,0 +1,5 @@
+flutter_launcher_icons:
+  android: "launcher_icon"
+  image_path: "assets/icon/igentecheg_logo.png"
+  min_sdk_android: 21
+  #ios: true
