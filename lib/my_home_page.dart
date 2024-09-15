@@ -43,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final AppLangCubit appLangCubit = BlocProvider.of<AppLangCubit>(context);
+    AppLangState appLangState = appLangCubit.state;
 
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
@@ -63,16 +64,23 @@ class _MyHomePageState extends State<MyHomePage> {
           BlocBuilder<ThemeCubit, ThemeState>(
             builder: (context, state) {
               final themeCubit = BlocProvider.of<ThemeCubit>(context);
-              return IconButton(
-                onPressed: () {
-                  themeCubit.changeAppMode();
-                },
-                icon: Icon(themeCubit.themeMode == ThemeMode.light
-                    ? Icons.dark_mode
-                    : Icons.light_mode),
+              return CircleAvatar(
+                child: IconButton(
+                  onPressed: () {
+                    themeCubit.changeAppMode();
+                  },
+                  icon: Icon(themeCubit.themeMode == ThemeMode.light
+                      ? Icons.dark_mode
+                      : Icons.light_mode),
+                ),
               );
             },
           ),
+          const SizedBox(width: 10),
+          const Text("|"),
+          const SizedBox(width: 10),
+
+          Text((appLangState as AppChangeLanguageState).langCode == "ar" ? "Ar" : "En"),
           Switch(
             value: appLangCubit.state is AppChangeLanguageState &&
                 (appLangCubit.state as AppChangeLanguageState).langCode == "ar",
@@ -82,6 +90,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   : appLangCubit.changeLanguage(LanguageEnums.englishLanguage);
             },
           ),
+          Text((appLangState as AppChangeLanguageState).langCode == "ar" ? "En" : "Ar"),
+          const SizedBox(width: 10),
+
         ],
       ),
       body: Center(
