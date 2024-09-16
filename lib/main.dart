@@ -6,16 +6,20 @@ import 'package:flutter_igentech_task/core/localization/lang_enum.dart';
 import 'package:flutter_igentech_task/core/theme/dark_theme.dart';
 import 'package:flutter_igentech_task/core/theme/light_theme.dart';
 import 'package:flutter_igentech_task/core/utils/app_helper.dart';
+import 'package:flutter_igentech_task/cubit/app_cubit/app_cubit.dart';
 import 'package:flutter_igentech_task/cubit/dark/theme_cubit.dart';
 import 'package:flutter_igentech_task/cubit/dark/theme_state.dart';
 import 'package:flutter_igentech_task/cubit/lang/app_lang_cubit.dart';
 import 'package:flutter_igentech_task/cubit/lang/app_lang_state.dart';
+import 'package:flutter_igentech_task/home_page.dart';
 import 'package:flutter_igentech_task/location_screen.dart';
+import 'package:flutter_igentech_task/my_bloc_observer.dart';
 import 'package:flutter_igentech_task/my_home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'injection_container.dart' as di;
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  //Bloc.observer = MyBlocObserver();
   //sharedPreferences = await SharedPreferences.getInstance();
   await di.init();
   runApp(const MyApp());
@@ -29,6 +33,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<AppCubit>(
+          create: (context) => AppCubit(),
+        ),
         // BlocProvider(
         //     create: (BuildContext context) =>
         //         AppLangCubit()..changeLanguage(LanguageEnums.initialLanguage)),
@@ -61,7 +68,7 @@ class MyApp extends StatelessWidget {
                 themeMode: (state is AppChangeModeState)
                     ? state.themeMode
                     : ThemeMode.light,
-                home:  const MyHomePage(),
+                home:   HomePage(),
               );
             },
           );
