@@ -14,3 +14,6 @@ class DateChangedState extends AppState {
   final DateTime birthdate;
   DateChangedState(this.birthdate);
 }
+
+
+class ChangePasswordVisibilityState extends AppState {}

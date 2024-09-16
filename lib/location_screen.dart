@@ -3,13 +3,14 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationScreen extends StatefulWidget {
+  const LocationScreen({super.key});
+
   @override
   _LocationScreenState createState() => _LocationScreenState();
 }
 
 class _LocationScreenState extends State<LocationScreen> {
   Position? _currentPosition;
-  String? _currentAddress;
 
   // Function to get the current location
   Future<void> _getCurrentLocation() async {
@@ -19,10 +20,12 @@ class _LocationScreenState extends State<LocationScreen> {
     // Test if location services are enabled
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled, don't continue
-      return Future.error('Location services are disabled.');
+      // Show dialog to ask the user to enable location services
+      _showLocationServiceDialog();
+      return;
     }
 
+// Check and request location permissions
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -47,6 +50,46 @@ class _LocationScreenState extends State<LocationScreen> {
     });
   }
 
+  // Function to show dialog when location services are disabled
+  void _showLocationServiceDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Location Services Disabled'),
+        content: const Text('Please enable location services to proceed.'),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Open Settings'),
+            onPressed: () async {
+              Navigator.of(context).pop();
+              // Open location settings (platform-specific)
+              try {
+                bool opened = await Geolocator.openLocationSettings();
+                if (!opened) {
+                  throw 'Could not open location settings';
+                }
+              } catch (e) {
+                print('Error: $e');
+                // Show error message to the user
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Could not open location settings.'),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   // Function to open Google Maps with the current location
   Future<void> _openInGoogleMaps() async {
     if (_currentPosition != null) {
@@ -66,7 +109,7 @@ class _LocationScreenState extends State<LocationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Geolocator Example'),
+        title: const Text('Geolocator Example'),
       ),
       body: Center(
         child: Column(
@@ -74,16 +117,16 @@ class _LocationScreenState extends State<LocationScreen> {
           children: <Widget>[
             _currentPosition != null
                 ? Text('Latitude: ${_currentPosition?.latitude}, Longitude: ${_currentPosition?.longitude}')
-                : Text('No location data'),
-            SizedBox(height: 20),
+                : const Text('No location data'),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _getCurrentLocation,
-              child: Text('Get Current Location'),
+              child: const Text('Get Current Location'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _openInGoogleMaps,
-              child: Text('Open in Google Maps'),
+              child: const Text('Open in Google Maps'),
             ),
           ],
         ),
