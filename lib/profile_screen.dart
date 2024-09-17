@@ -36,6 +36,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }
           if (snapshot.hasData && snapshot.data!.isNotEmpty) {
             return ListView.separated(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.only(
+                bottom: 80,
+              ),
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 return ListTile(
@@ -48,12 +52,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Text("Email : ${snapshot.data?[index]['email']}"),
                       Text("Password : ${snapshot.data?[index]['password']}"),
+                      Text("Gender : ${snapshot.data?[index]['gender']}"),
+                      Text("Date : ${snapshot.data?[index]['date']}"),
                     ],
                   ),
                 );
               },
               separatorBuilder: (context, index) {
-                return Divider();
+                return const Divider();
               },
             );
           } else if (snapshot.data!.isEmpty) {
@@ -68,8 +74,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: (){},
-        label: Text("View On Map"),
-        icon: Icon(Icons.map),
+        label: const Text("View On Map"),
+        icon: const Icon(Icons.map),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

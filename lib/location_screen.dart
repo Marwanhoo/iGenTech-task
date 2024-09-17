@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_igentech_task/cubit/app_cubit/app_cubit.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -43,7 +44,10 @@ class _LocationScreenState extends State<LocationScreen> {
 
     // If permissions are granted, get the position
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.high,
+      ),
+    );
 
     setState(() {
       _currentPosition = position;
@@ -75,10 +79,10 @@ class _LocationScreenState extends State<LocationScreen> {
                   throw 'Could not open location settings';
                 }
               } catch (e) {
-                print('Error: $e');
+                debugPrint('Error: $e');
                 // Show error message to the user
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+                  const SnackBar(
                     content: Text('Could not open location settings.'),
                   ),
                 );
@@ -90,21 +94,6 @@ class _LocationScreenState extends State<LocationScreen> {
     );
   }
 
-  // Function to open Google Maps with the current location
-  Future<void> _openInGoogleMaps() async {
-    if (_currentPosition != null) {
-      final latitude = _currentPosition!.latitude;
-      final longitude = _currentPosition!.longitude;
-      final googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
-
-      if (await canLaunch(googleMapsUrl)) {
-        await launch(googleMapsUrl);
-      } else {
-        throw 'Could not open Google Maps';
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -112,7 +101,8 @@ class _LocationScreenState extends State<LocationScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           _currentPosition != null
-              ? Text('Latitude: ${_currentPosition?.latitude}, Longitude: ${_currentPosition?.longitude}')
+              ? Text(
+                  'Latitude: ${_currentPosition?.latitude}, Longitude: ${_currentPosition?.longitude}')
               : const Text('No location data'),
           const SizedBox(height: 20),
           ElevatedButton(
@@ -121,7 +111,10 @@ class _LocationScreenState extends State<LocationScreen> {
           ),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: _openInGoogleMaps,
+            onPressed: () {
+              BlocProvider.of<AppCubit>(context)
+                  .openInGoogleMaps(_currentPosition);
+            },
             child: const Text('Open in Google Maps'),
           ),
         ],

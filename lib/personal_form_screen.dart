@@ -189,36 +189,33 @@ class PersonalFormScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 10),
-                const LocationScreen(),
+                 const LocationScreen(),
                 const SizedBox(height: 10),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),
                   ),
                   onPressed: () async{
+                    String date = "${appCubit.selectedDate!.day}/${appCubit.selectedDate!.month}/${appCubit.selectedDate!.year}";
                     if (formKey.currentState!.validate()) {
                       int response = await sqlDb.insert("notes", {
                         "name" : nameController.text,
                         "email" : emailController.text,
                         "password" : passwordController.text,
+                        "gender" : appCubit.selectedGender,
+                        "date" : date,
                       });
 
                       if(response > 0){
-
                         Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => ProfileScreen()));
-
+                            MaterialPageRoute(builder: (_) => const ProfileScreen()));
 
                       }
 
 
-
-
-
-
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Please Form Data")));
+                          const SnackBar(content: Text("Please Form Data")));
                     }
                   },
                   child:
