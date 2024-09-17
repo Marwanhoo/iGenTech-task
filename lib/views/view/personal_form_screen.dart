@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_igentech_task/controllers/app_cubit/app_cubit.dart';
+import 'package:flutter_igentech_task/controllers/app_cubit/app_state.dart';
+import 'package:flutter_igentech_task/controllers/dark/theme_cubit.dart';
+import 'package:flutter_igentech_task/controllers/dark/theme_state.dart';
+import 'package:flutter_igentech_task/controllers/lang/app_lang_cubit.dart';
+import 'package:flutter_igentech_task/controllers/lang/app_lang_state.dart';
 import 'package:flutter_igentech_task/core/localization/lang_enum.dart';
 import 'package:flutter_igentech_task/core/utils/app_helper.dart';
-import 'package:flutter_igentech_task/core/widget/custom_text_field.dart';
-import 'package:flutter_igentech_task/features/personal/domain/app_cubit/app_cubit.dart';
-import 'package:flutter_igentech_task/features/personal/domain/app_cubit/app_state.dart';
-import 'package:flutter_igentech_task/features/personal/domain/dark/theme_cubit.dart';
-import 'package:flutter_igentech_task/features/personal/domain/dark/theme_state.dart';
-import 'package:flutter_igentech_task/features/personal/domain/lang/app_lang_cubit.dart';
-import 'package:flutter_igentech_task/features/personal/domain/lang/app_lang_state.dart';
-import 'package:flutter_igentech_task/features/personal/presentation/location_screen.dart';
-import 'package:flutter_igentech_task/features/personal/presentation/profile_screen.dart';
+import 'package:flutter_igentech_task/views/view/location_screen.dart';
+import 'package:flutter_igentech_task/views/view/profile_screen.dart';
+import 'package:flutter_igentech_task/views/widget/custom_text_field.dart';
 import 'package:geolocator/geolocator.dart';
 
 class PersonalFormScreen extends StatelessWidget {

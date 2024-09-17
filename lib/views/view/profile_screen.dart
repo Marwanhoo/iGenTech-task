@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_igentech_task/features/personal/data/profile_model.dart';
-import 'package:flutter_igentech_task/features/personal/domain/app_cubit/app_cubit.dart';
-import 'package:flutter_igentech_task/features/personal/domain/app_cubit/app_state.dart';
+import 'package:flutter_igentech_task/controllers/app_cubit/app_cubit.dart';
+import 'package:flutter_igentech_task/controllers/app_cubit/app_state.dart';
+import 'package:flutter_igentech_task/models/model/profile_model.dart';
 import 'package:geolocator/geolocator.dart';
 
 class ProfileScreen extends StatelessWidget {

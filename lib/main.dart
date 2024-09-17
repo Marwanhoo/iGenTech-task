@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_igentech_task/controllers/app_cubit/app_cubit.dart';
+import 'package:flutter_igentech_task/controllers/dark/theme_cubit.dart';
+import 'package:flutter_igentech_task/controllers/dark/theme_state.dart';
+import 'package:flutter_igentech_task/controllers/lang/app_lang_cubit.dart';
+import 'package:flutter_igentech_task/controllers/lang/app_lang_state.dart';
 import 'package:flutter_igentech_task/core/localization/app_localization_config.dart';
 import 'package:flutter_igentech_task/core/theme/dark_theme.dart';
 import 'package:flutter_igentech_task/core/theme/light_theme.dart';
-import 'package:flutter_igentech_task/features/personal/domain/app_cubit/app_cubit.dart';
-import 'package:flutter_igentech_task/features/personal/domain/dark/theme_cubit.dart';
-import 'package:flutter_igentech_task/features/personal/domain/dark/theme_state.dart';
-import 'package:flutter_igentech_task/features/personal/domain/lang/app_lang_cubit.dart';
-import 'package:flutter_igentech_task/features/personal/domain/lang/app_lang_state.dart';
-import 'package:flutter_igentech_task/features/personal/presentation/auth_finger.dart';
+import 'package:flutter_igentech_task/views/view/auth_finger.dart';
 import 'core/utils/injection_container.dart' as di;
 import 'core/utils/app_strings.dart';
 

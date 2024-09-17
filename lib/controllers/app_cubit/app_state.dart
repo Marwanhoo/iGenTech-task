@@ -1,5 +1,6 @@
 
-import 'package:flutter_igentech_task/features/personal/data/profile_model.dart';
+
+import 'package:flutter_igentech_task/models/model/profile_model.dart';
 
 abstract class AppState {}
 

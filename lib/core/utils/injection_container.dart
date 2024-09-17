@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_igentech_task/controllers/dark/theme_cubit.dart';
+import 'package:flutter_igentech_task/controllers/lang/app_lang_cubit.dart';
 import 'package:flutter_igentech_task/core/localization/lang_enum.dart';
 import 'package:flutter_igentech_task/core/utils/my_bloc_observer.dart';
-import 'package:flutter_igentech_task/features/personal/domain/dark/theme_cubit.dart';
-import 'package:flutter_igentech_task/features/personal/domain/lang/app_lang_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_igentech_task/features/personal/data/profile_model.dart';
-import 'package:flutter_igentech_task/features/personal/domain/app_cubit/app_state.dart';
-import 'package:flutter_igentech_task/features/personal/data/sqldb.dart';
+import 'package:flutter_igentech_task/controllers/app_cubit/app_state.dart';
+import 'package:flutter_igentech_task/models/database/sqldb.dart';
+import 'package:flutter_igentech_task/models/model/profile_model.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 

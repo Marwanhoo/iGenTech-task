@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_igentech_task/features/personal/presentation/personal_form_screen.dart';
+import 'package:flutter_igentech_task/views/view/personal_form_screen.dart';
 import 'package:local_auth/local_auth.dart';
 
 class AuthFinger extends StatefulWidget {
