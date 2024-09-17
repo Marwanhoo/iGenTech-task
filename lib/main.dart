@@ -8,10 +8,6 @@ import 'package:flutter_igentech_task/cubit/dark/theme_cubit.dart';
 import 'package:flutter_igentech_task/cubit/dark/theme_state.dart';
 import 'package:flutter_igentech_task/cubit/lang/app_lang_cubit.dart';
 import 'package:flutter_igentech_task/cubit/lang/app_lang_state.dart';
-import 'package:flutter_igentech_task/features/auth/presentation/auth_finger.dart';
-import 'package:flutter_igentech_task/home_page.dart';
-import 'package:flutter_igentech_task/location_screen.dart';
-import 'package:flutter_igentech_task/my_home_page.dart';
 import 'package:flutter_igentech_task/personal_form_screen.dart';
 import 'core/utils/injection_container.dart' as di;
 import 'core/utils/app_strings.dart';
@@ -60,7 +56,7 @@ class MyApp extends StatelessWidget {
                 themeMode: (state is AppChangeModeState)
                     ? state.themeMode
                     : ThemeMode.light,
-                home: const LocationScreen(),
+                home: const PersonalFormScreen(),
               );
             },
           );

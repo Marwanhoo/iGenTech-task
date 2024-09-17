@@ -1,3 +1,24 @@
 {
-  "title" : "الصفحة الرئيسية"
+  "title" : "الصفحة الرئيسية",
+  "personal" : "الملف الشخصي",
+  "profile" : "الملف الشخصي",
+  "firstName" : "الأسم الأول",
+  "email" : "البريد الإلكتروني",
+  "password" : "كلمة المرور",
+  "selectGender" : "تحديد الجنس",
+  "chooseGender" : "اختر الجنس",
+  "selectBirthdate" : "حدد تاريخ الميلاد",
+  "pickDate" : "اختر التاريخ",
+  "noDateSelected" : "لم يتم تحديد تاريخ",
+  "selectedDate" : "التاريخ المحدد",
+  "save" : "حفظ",
+  "male" : "ذكر",
+  "female" : "أنثي"
+
+
+
+
+
+
+
 }

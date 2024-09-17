@@ -107,29 +107,24 @@ class _LocationScreenState extends State<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Geolocator Example'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _currentPosition != null
-                ? Text('Latitude: ${_currentPosition?.latitude}, Longitude: ${_currentPosition?.longitude}')
-                : const Text('No location data'),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _getCurrentLocation,
-              child: const Text('Get Current Location'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _openInGoogleMaps,
-              child: const Text('Open in Google Maps'),
-            ),
-          ],
-        ),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          _currentPosition != null
+              ? Text('Latitude: ${_currentPosition?.latitude}, Longitude: ${_currentPosition?.longitude}')
+              : const Text('No location data'),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: _getCurrentLocation,
+            child: const Text('Get Current Location'),
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: _openInGoogleMaps,
+            child: const Text('Open in Google Maps'),
+          ),
+        ],
       ),
     );
   }

@@ -9,6 +9,7 @@ class AppCubit extends Cubit<AppState> {
   String? selectedGender;
   DateTime? selectedDate;
 
+
   // Method to change gender
   void changeGender(String gender) {
     selectedGender = gender;
@@ -20,6 +21,19 @@ class AppCubit extends Cubit<AppState> {
     selectedDate = date;
     emit(DateChangedState(date));
   }
+
+  Future<void> selectDate(BuildContext context, AppCubit cubit) async {
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: cubit.selectedDate ?? DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      cubit.changeBirthdate(picked);
+    }
+  }
+
 
 
   IconData suffix = Icons.visibility_off_outlined;
