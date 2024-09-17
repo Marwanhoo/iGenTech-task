@@ -11,6 +11,7 @@ import 'package:flutter_igentech_task/cubit/lang/app_lang_cubit.dart';
 import 'package:flutter_igentech_task/cubit/lang/app_lang_state.dart';
 import 'package:flutter_igentech_task/location_screen.dart';
 import 'package:flutter_igentech_task/profile_screen.dart';
+import 'package:flutter_igentech_task/sqldb.dart';
 
 class PersonalFormScreen extends StatelessWidget {
   const PersonalFormScreen({super.key});
@@ -29,6 +30,8 @@ class PersonalFormScreen extends StatelessWidget {
       (translateText(context: context, textJson: "male")),
       (translateText(context: context, textJson: "female")),
     ];
+
+    SqlDb sqlDb = SqlDb();
 
     return Scaffold(
       appBar: AppBar(
@@ -192,10 +195,27 @@ class PersonalFormScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),
                   ),
-                  onPressed: () {
+                  onPressed: () async{
                     if (formKey.currentState!.validate()) {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => ProfileScreen()));
+                      int response = await sqlDb.insert("notes", {
+                        "name" : nameController.text,
+                        "email" : emailController.text,
+                        "password" : passwordController.text,
+                      });
+
+                      if(response > 0){
+
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => ProfileScreen()));
+
+
+                      }
+
+
+
+
+
+
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text("Please Form Data")));
