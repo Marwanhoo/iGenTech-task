@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_igentech_task/cubit/app_cubit/app_cubit.dart';
+import 'package:flutter_igentech_task/features/personal/domain/app_cubit/app_cubit.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationScreen extends StatefulWidget {
-  const LocationScreen({super.key});
+  const LocationScreen({super.key, required this.onLocationSelected});
+  final Function(Position) onLocationSelected;
 
   @override
-  _LocationScreenState createState() => _LocationScreenState();
+  State<LocationScreen> createState() => _LocationScreenState();
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  Position? _currentPosition;
+  Position? currentPosition;
 
   // Function to get the current location
-  Future<void> _getCurrentLocation() async {
+  Future<void> getCurrentLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -22,7 +23,9 @@ class _LocationScreenState extends State<LocationScreen> {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       // Show dialog to ask the user to enable location services
-      _showLocationServiceDialog();
+      if (mounted) {
+        BlocProvider.of<AppCubit>(context).showLocationServiceDialog(context);
+      }
       return;
     }
 
@@ -50,48 +53,9 @@ class _LocationScreenState extends State<LocationScreen> {
     );
 
     setState(() {
-      _currentPosition = position;
+      currentPosition = position;
     });
-  }
-
-  // Function to show dialog when location services are disabled
-  void _showLocationServiceDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Location Services Disabled'),
-        content: const Text('Please enable location services to proceed.'),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('Cancel'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          TextButton(
-            child: const Text('Open Settings'),
-            onPressed: () async {
-              Navigator.of(context).pop();
-              // Open location settings (platform-specific)
-              try {
-                bool opened = await Geolocator.openLocationSettings();
-                if (!opened) {
-                  throw 'Could not open location settings';
-                }
-              } catch (e) {
-                debugPrint('Error: $e');
-                // Show error message to the user
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Could not open location settings.'),
-                  ),
-                );
-              }
-            },
-          ),
-        ],
-      ),
-    );
+    widget.onLocationSelected(position);
   }
 
   @override
@@ -99,21 +63,21 @@ class _LocationScreenState extends State<LocationScreen> {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          _currentPosition != null
+        children: [
+          currentPosition != null
               ? Text(
-                  'Latitude: ${_currentPosition?.latitude}, Longitude: ${_currentPosition?.longitude}')
+                  'Latitude: ${currentPosition?.latitude}, Longitude: ${currentPosition?.longitude}')
               : const Text('No location data'),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: _getCurrentLocation,
+            onPressed: getCurrentLocation,
             child: const Text('Get Current Location'),
           ),
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
               BlocProvider.of<AppCubit>(context)
-                  .openInGoogleMaps(_currentPosition);
+                  .openInGoogleMaps(currentPosition);
             },
             child: const Text('Open in Google Maps'),
           ),

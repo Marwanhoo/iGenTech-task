@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_igentech_task/my_home_page.dart';
+import 'package:flutter_igentech_task/features/personal/presentation/personal_form_screen.dart';
 import 'package:local_auth/local_auth.dart';
 
 class AuthFinger extends StatefulWidget {
@@ -35,7 +35,7 @@ class _AuthFingerState extends State<AuthFinger> {
           Center(
             child: Container(
               decoration: const BoxDecoration(
-                color: Colors.red,
+                color: Colors.purple,
                 shape: BoxShape.circle,
               ),
               child: IconButton(
@@ -51,13 +51,12 @@ class _AuthFingerState extends State<AuthFinger> {
                     );
                     if(isAuthenticate){
                       Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (_) => const MyHomePage()),
+                        MaterialPageRoute(builder: (_) => const PersonalFormScreen()),
                             (route) => false,
                       );
                     }else{
-                      // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Authentica false")));
                     }
-                  } on PlatformException catch (e) {}
+                  } on PlatformException {}
                   if(!mounted){
                     return;
                   }

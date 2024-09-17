@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_igentech_task/cubit/dark/theme_state.dart';
+import 'package:flutter_igentech_task/features/personal/domain/dark/theme_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 

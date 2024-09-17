@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_igentech_task/cubit/app_cubit/app_state.dart';
-import 'package:flutter_igentech_task/profile_screen.dart';
-import 'package:flutter_igentech_task/sqldb.dart';
+import 'package:flutter_igentech_task/features/personal/domain/app_cubit/app_state.dart';
+import 'package:flutter_igentech_task/features/personal/data/sqldb.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -52,19 +52,6 @@ class AppCubit extends Cubit<AppState> {
 
 
 
-  Future<void> openInGoogleMaps(_currentPosition) async {
-    if (_currentPosition != null) {
-      final latitude = _currentPosition!.latitude;
-      final longitude = _currentPosition!.longitude;
-      final googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
-
-      if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
-        await launchUrl(Uri.parse(googleMapsUrl));
-      } else {
-        throw 'Could not open Google Maps';
-      }
-    }
-  }
 
 
 
@@ -108,14 +95,71 @@ class AppCubit extends Cubit<AppState> {
 
         if (response > 0) {
           emit(FormSubmittedState());
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const ProfileScreen()),
-          );
         }
       } catch (e) {
         emit(FormErrorState("Failed to submit form: ${e.toString()}"));
       }
 
+  }
+
+
+
+
+/// Location
+  Future<void> openInGoogleMaps(currentPosition) async {
+    if (currentPosition != null) {
+      final latitude = currentPosition!.latitude;
+      final longitude = currentPosition!.longitude;
+      final googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+
+      if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+        await launchUrl(Uri.parse(googleMapsUrl));
+      } else {
+        throw 'Could not open Google Maps';
+      }
+    }
+  }
+
+
+
+  // Function to show dialog when location services are disabled
+  void showLocationServiceDialog(context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Location Services Disabled'),
+        content: const Text('Please enable location services to proceed.'),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Open Settings'),
+            onPressed: () async {
+              Navigator.of(context).pop();
+              // Open location settings (platform-specific)
+              try {
+                bool opened = await Geolocator.openLocationSettings();
+                if (!opened) {
+                  throw 'Could not open location settings';
+                }
+              } catch (e) {
+                debugPrint('Error: $e');
+                // Show error message to the user
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Could not open location settings.'),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
+      ),
+    );
   }
 
 

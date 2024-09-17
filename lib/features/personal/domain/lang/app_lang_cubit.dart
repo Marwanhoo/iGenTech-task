@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_igentech_task/core/localization/lang_enum.dart';
-import 'package:flutter_igentech_task/cubit/lang/app_lang_state.dart';
+import 'package:flutter_igentech_task/features/personal/domain/lang/app_lang_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppLangCubit extends Cubit<AppLangState> {

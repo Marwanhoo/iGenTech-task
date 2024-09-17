@@ -3,15 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_igentech_task/core/localization/lang_enum.dart';
 import 'package:flutter_igentech_task/core/utils/app_helper.dart';
 import 'package:flutter_igentech_task/core/widget/custom_text_field.dart';
-import 'package:flutter_igentech_task/cubit/app_cubit/app_cubit.dart';
-import 'package:flutter_igentech_task/cubit/app_cubit/app_state.dart';
-import 'package:flutter_igentech_task/cubit/dark/theme_cubit.dart';
-import 'package:flutter_igentech_task/cubit/dark/theme_state.dart';
-import 'package:flutter_igentech_task/cubit/lang/app_lang_cubit.dart';
-import 'package:flutter_igentech_task/cubit/lang/app_lang_state.dart';
-import 'package:flutter_igentech_task/location_screen.dart';
-import 'package:flutter_igentech_task/profile_screen.dart';
-import 'package:flutter_igentech_task/sqldb.dart';
+import 'package:flutter_igentech_task/features/personal/domain/app_cubit/app_cubit.dart';
+import 'package:flutter_igentech_task/features/personal/domain/app_cubit/app_state.dart';
+import 'package:flutter_igentech_task/features/personal/domain/dark/theme_cubit.dart';
+import 'package:flutter_igentech_task/features/personal/domain/dark/theme_state.dart';
+import 'package:flutter_igentech_task/features/personal/domain/lang/app_lang_cubit.dart';
+import 'package:flutter_igentech_task/features/personal/domain/lang/app_lang_state.dart';
+import 'package:flutter_igentech_task/features/personal/presentation/location_screen.dart';
+import 'package:flutter_igentech_task/features/personal/presentation/profile_screen.dart';
+import 'package:geolocator/geolocator.dart';
 
 class PersonalFormScreen extends StatelessWidget {
   const PersonalFormScreen({super.key});
@@ -25,13 +25,12 @@ class PersonalFormScreen extends StatelessWidget {
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    Position? selectedPosition; // To store the position
 
     List<String> genderList = [
       (translateText(context: context, textJson: "male")),
       (translateText(context: context, textJson: "female")),
     ];
-
-    SqlDb sqlDb = SqlDb();
 
     return Scaffold(
       appBar: AppBar(
@@ -70,8 +69,10 @@ class PersonalFormScreen extends StatelessWidget {
               }
             },
           ),
-          Text(appLangState is AppChangeLanguageState && appLangState.langCode == "ar" ? "En" : "Ar"),
-
+          Text(appLangState is AppChangeLanguageState &&
+                  appLangState.langCode == "ar"
+              ? "En"
+              : "Ar"),
           const SizedBox(width: 10),
         ],
       ),
@@ -189,69 +190,51 @@ class PersonalFormScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 10),
-                 const LocationScreen(),
-                const SizedBox(height: 10),
-                // ElevatedButton(
-                //   style: ElevatedButton.styleFrom(
-                //     minimumSize: const Size(double.infinity, 50),
-                //   ),
-                //   onPressed: () async{
-                //     String date = "${appCubit.selectedDate!.day}/${appCubit.selectedDate!.month}/${appCubit.selectedDate!.year}";
-                //     if (formKey.currentState!.validate()) {
-                //       int response = await sqlDb.insert("notes", {
-                //         "name" : nameController.text,
-                //         "email" : emailController.text,
-                //         "password" : passwordController.text,
-                //         "gender" : appCubit.selectedGender,
-                //         "date" : date,
-                //       });
-                //
-                //       if(response > 0){
-                //         Navigator.of(context).push(
-                //             MaterialPageRoute(builder: (_) => const ProfileScreen()));
-                //
-                //       }
-                //
-                //
-                //     } else {
-                //       ScaffoldMessenger.of(context).showSnackBar(
-                //           const SnackBar(content: Text("Please Form Data")));
-                //     }
-                //   },
-                //   child:
-                //       Text(translateText(context: context, textJson: "save")),
-                // ),
-
-                BlocConsumer<AppCubit, AppState>(
-  listener: (context, state) {
-    if(state is FormErrorState){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please Choose Gender and Birthdata")));
-
-    }
-  },
-  builder: (context, state) {
-    return ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                  onPressed: () {
-                    if(formKey.currentState!.validate()){
-                      appCubit.submitForm(
-                        nameController: nameController,
-                        emailController: emailController,
-                        passwordController: passwordController,
-                        context: context,
-                      );
-                    }else{
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please Fill The Form")));
-                    }
-
+                LocationScreen(
+                  onLocationSelected: (Position position) {
+                    selectedPosition = position;
                   },
-                  child: Text(translateText(context: context, textJson: "save")),
-                );
-  },
-),
-
+                ),
+                const SizedBox(height: 10),
+                BlocConsumer<AppCubit, AppState>(
+                  listener: (context, state) {
+                    if (state is FormSubmittedState) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => ProfileScreen(
+                            selectedPosition: selectedPosition,
+                          ),
+                        ),
+                      );
+                    }
+                    if (state is FormErrorState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        buildSnackBar("Please Choose Gender and Birthdate"),
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    return ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 50),
+                      ),
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          appCubit.submitForm(
+                            nameController: nameController,
+                            emailController: emailController,
+                            passwordController: passwordController,
+                            context: context,
+                          );
+                        } else {
+                          buildSnackBar("Please Fill The Form");
+                        }
+                      },
+                      child: Text(
+                          translateText(context: context, textJson: "save")),
+                    );
+                  },
+                ),
                 const SizedBox(height: 10),
               ],
             ),
