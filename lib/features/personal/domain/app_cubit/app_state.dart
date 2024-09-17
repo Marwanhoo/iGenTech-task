@@ -1,4 +1,6 @@
 
+import 'package:flutter_igentech_task/features/personal/data/profile_model.dart';
+
 abstract class AppState {}
 
 class AppInitial extends AppState {}
@@ -22,7 +24,9 @@ class ChangePasswordVisibilityState extends AppState {}
 class LoadingState extends AppState {}
 
 class ProfileLoadedState extends AppState {
-  final List<Map> profileData;
+  //final List<Map> profileData;
+  final List<ProfileModel> profileData;
+
 
   ProfileLoadedState(this.profileData);
 }

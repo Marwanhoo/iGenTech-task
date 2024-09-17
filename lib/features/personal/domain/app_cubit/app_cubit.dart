@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_igentech_task/features/personal/data/profile_model.dart';
 import 'package:flutter_igentech_task/features/personal/domain/app_cubit/app_state.dart';
 import 'package:flutter_igentech_task/features/personal/data/sqldb.dart';
 import 'package:geolocator/geolocator.dart';
@@ -56,13 +57,16 @@ class AppCubit extends Cubit<AppState> {
 
 
   SqlDb sqlDb = SqlDb();
-  List<Map> profileData = [];
+  //List<Map> profileData = [];
+  List<ProfileModel> profileData = [];
   Future<void> loadProfileData() async {
     emit(LoadingState()); // Emit loading state initially
     try {
-      List<Map> response = await sqlDb.read("notes");
+      //List<Map> response = await sqlDb.read("notes");
+      List<Map<String, dynamic>> response = await sqlDb.read("notes");
       if (response.isNotEmpty) {
-        profileData = response;
+        //profileData = response;
+        profileData = response.map((map) => ProfileModel.fromMap(map)).toList();
         emit(ProfileLoadedState(profileData));
       } else {
         emit(EmptyProfileState()); // Emit if data is empty

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_igentech_task/features/personal/data/profile_model.dart';
 import 'package:flutter_igentech_task/features/personal/domain/app_cubit/app_cubit.dart';
 import 'package:flutter_igentech_task/features/personal/domain/app_cubit/app_state.dart';
 import 'package:geolocator/geolocator.dart';
@@ -38,19 +39,20 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 itemCount: state.profileData.length,
                 itemBuilder: (context, index) {
+                  ProfileModel profile = state.profileData[index];
+                  //state.profileData[index]['id']
                   return ListTile(
                     leading: CircleAvatar(
-                      child: Text("${state.profileData[index]['id']}"),
+                      child: Text("${profile.id}"),
                     ),
-                    title: Text("Name : ${state.profileData[index]['name']}"),
+                    title: Text("Name : ${profile.name}"),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Email : ${state.profileData[index]['email']}"),
-                        Text(
-                            "Password : ${state.profileData[index]['password']}"),
-                        Text("Gender : ${state.profileData[index]['gender']}"),
-                        Text("Date : ${state.profileData[index]['date']}"),
+                        Text("Email : ${profile.email}"),
+                        Text("Password : ${profile.password}"),
+                        Text("Gender : ${profile.gender}"),
+                        Text("Date : ${profile.date}"),
                       ],
                     ),
                   );
