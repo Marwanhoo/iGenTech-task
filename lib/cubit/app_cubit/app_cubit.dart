@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_igentech_task/cubit/app_cubit/app_state.dart';
+import 'package:flutter_igentech_task/profile_screen.dart';
+import 'package:flutter_igentech_task/sqldb.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -63,5 +65,58 @@ class AppCubit extends Cubit<AppState> {
       }
     }
   }
+
+
+
+  SqlDb sqlDb = SqlDb();
+  List<Map> profileData = [];
+  Future<void> loadProfileData() async {
+    emit(LoadingState()); // Emit loading state initially
+    try {
+      List<Map> response = await sqlDb.read("notes");
+      if (response.isNotEmpty) {
+        profileData = response;
+        emit(ProfileLoadedState(profileData));
+      } else {
+        emit(EmptyProfileState()); // Emit if data is empty
+      }
+    } catch (e) {
+      emit(ProfileErrorState(e.toString())); // Emit error state
+    }
+  }
+
+
+
+
+  Future<void> submitForm({
+    required TextEditingController nameController,
+    required TextEditingController emailController,
+    required TextEditingController passwordController,
+    required BuildContext context,
+  }) async {
+      String date = "${selectedDate?.day}/${selectedDate?.month}/${selectedDate?.year}";
+      try {
+        emit(FormSubmittingState());
+
+        int response = await sqlDb.insert("notes", {
+          "name": nameController.text,
+          "email": emailController.text,
+          "password": passwordController.text,
+          "gender": selectedGender,
+          "date": date,
+        });
+
+        if (response > 0) {
+          emit(FormSubmittedState());
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const ProfileScreen()),
+          );
+        }
+      } catch (e) {
+        emit(FormErrorState("Failed to submit form: ${e.toString()}"));
+      }
+
+  }
+
 
 }

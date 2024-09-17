@@ -17,3 +17,36 @@ class DateChangedState extends AppState {
 
 
 class ChangePasswordVisibilityState extends AppState {}
+
+
+class LoadingState extends AppState {}
+
+class ProfileLoadedState extends AppState {
+  final List<Map> profileData;
+
+  ProfileLoadedState(this.profileData);
+}
+
+class EmptyProfileState extends AppState {}
+
+class ProfileErrorState extends AppState {
+  final String error;
+
+  ProfileErrorState(this.error);
+}
+
+
+
+
+
+
+
+class FormSubmittingState extends AppState {}
+
+class FormSubmittedState extends AppState {}
+
+class FormErrorState extends AppState {
+  final String message;
+  FormErrorState(this.message);
+}
+
